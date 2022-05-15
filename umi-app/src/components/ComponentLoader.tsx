@@ -9,7 +9,8 @@ function loadStyle(styleCode: string) {
 }
 
 function loadComponent(props: any) {
-  const { code, path, style, components = [], libs = [] } = props;
+  const { code, style, components = [], libs = [] } = props;
+  const path = window.location.pathname;
 
   const deps = Array.from(new Set(['React', ...libs, ...components]));
 
@@ -37,13 +38,17 @@ function loadComponent(props: any) {
 
 // 根据字符串加载组件
 function ComponentLoader(props: any) {
-  const { code, path, isComponent } = props;
+  const { code, isComponent } = props;
   if (!code) return <div>Loading...</div>;
+
+  const path = window.location.pathname;
 
   let Com = isComponent ? window.$app[`${path}/test`] : window.$app[path];
   if (!Com) {
     Com = loadComponent(props);
   }
+
+  if (!Com) return null;
 
   return <Com {...props} />;
 }

@@ -39,6 +39,7 @@ export default function PageEdit(props: any) {
     delete values.editorValue;
     const params = {
       ...values,
+      pathname: `/${query.code}${values.path}`,
       sourcecode,
       style,
     };

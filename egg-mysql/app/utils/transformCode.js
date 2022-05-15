@@ -9,22 +9,21 @@ const exportReg = /export default (.*);?/;
  * @returns
  */
 async function transformCode(page) {
-  const { sourcecode, path, isComponent } = page;
-
+  const { sourcecode, pathname } = page;
   const [_, componentName] = sourcecode.match(exportReg);
 
   const result = await bable.transformAsync(sourcecode.replace(exportReg, ''), {
     presets: ['@babel/preset-react'],
   });
 
-  result.code += `window.$app['${path}'] = ${componentName}`;
+  result.code += `window.$app['${pathname}'] = ${componentName}`;
 
   // 如果是组件要导出测试组件
-  if (isComponent) {
-    result.code += `window.$app['${path}/test'] = Test;`;
+  if (pathname.startsWith('/components/')) {
+    result.code += `window.$app['${pathname}/test'] = Test;`;
   }
 
-  delete page.isComponent;
+  delete page.pathname;
   return result.code;
 }
 

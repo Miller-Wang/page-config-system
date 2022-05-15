@@ -44,7 +44,7 @@ export default function PageEdit(props: any) {
     const params = {
       ...values,
       path: `/${values.name}`,
-      isComponent: query.code === 'components',
+      pathname: `/components/${values.name}`,
       ...values.editorValue,
     };
 
