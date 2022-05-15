@@ -1,0 +1,33 @@
+@width: 375px;
+@height: 667px;
+
+.iframe-preview {
+  position: fixed;
+  right: 0;
+  top: 50px;
+  width: @width;
+  height: calc(@height + 32px);
+  background-color: white;
+  border: 1px solid #eee;
+  
+
+  iframe {
+    width: @width;
+    height: @height;
+    border: 1px solid #eee;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navigator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3px;
+    
+    .anticon:hover{
+      color: #1890ff;
+    }
+  }
+
+}
