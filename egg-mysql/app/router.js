@@ -31,4 +31,10 @@ module.exports = (app) => {
 
   // h5接口 根据页面路径与项目id获取页面详情
   router.get('/:code/page', controller.pages.getDetailByPath);
+
+
+  // 代码格式化
+  router.post('/page/codeFormat', controller.pages.codeFormat);
+
+  // 校验代码
 };

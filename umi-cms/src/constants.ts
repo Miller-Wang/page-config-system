@@ -1,6 +1,5 @@
 /** 默认组件代码 */
-export const DEFAULT_COMPONENT = `
-import React from 'react';
+export const DEFAULT_COMPONENT = `import React from 'react';
 
 // 组件
 function Component(props) {
@@ -19,8 +18,7 @@ export default Component;
 `;
 
 /** 默认页面代码 */
-export const DEFAULT_PAGE = `
-import React from 'react';
+export const DEFAULT_PAGE = `import React from 'react';
 
 // 页面组件
 function Page(props) {

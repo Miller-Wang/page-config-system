@@ -1,6 +1,7 @@
 'use strict';
 
 const Controller = require('egg').Controller;
+const formatCode = require('../utils/formatCode');
 const transformCode = require('../utils/transformCode');
 
 class PagesController extends Controller {
@@ -149,6 +150,19 @@ class PagesController extends Controller {
     ctx.body = {
       success: true,
       data: res,
+    };
+  }
+
+  // 代码格式化
+  async codeFormat(){
+    const { ctx } = this;
+    const { code } = ctx.request.body;
+
+    ctx.body = {
+      success: true,
+      data: {
+        code: formatCode(code)
+      },
     };
   }
 }

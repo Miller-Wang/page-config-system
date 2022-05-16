@@ -68,7 +68,7 @@ export default function PageList(props: any) {
               编辑
             </span>
             <Popconfirm
-              title="是否确认删除"
+              title="删除前请确认删除引用该组件的代码？"
               onConfirm={() => handleAction(3, row)}
             >
               <span className="link-span danger">删除</span>
