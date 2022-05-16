@@ -20,12 +20,7 @@ class PagesController extends Controller {
     const { ctx } = this;
     const id = ctx.params.id;
     const data = await this.app.mysql.get('pages', { id });
-    if (data.libs) {
-      data.libs = data.libs.split(',');
-    }
-    if (data.components) {
-      data.components = data.components.split(',');
-    }
+
     ctx.body = {
       success: true,
       data: data,
@@ -53,12 +48,6 @@ class PagesController extends Controller {
     if (pages && pages.length > 0) {
       const data = pages.find((v) => v.path === path);
       if (data) {
-        if (data.libs) {
-          data.libs = data.libs.split(',');
-        }
-        if (data.components) {
-          data.components = data.components.split(',');
-        }
         ctx.body = {
           success: true,
           data,
@@ -77,13 +66,6 @@ class PagesController extends Controller {
     const projectId = ctx.params.projectId;
     const page = ctx.request.body;
     page.project_id = parseInt(projectId);
-    if (Array.isArray(page.libs)) {
-      page.libs = page.libs.join(',');
-    }
-
-    if (Array.isArray(page.components)) {
-      page.components = page.components.join(',');
-    }
 
     // 校验保存数据
     try {
@@ -123,14 +105,6 @@ class PagesController extends Controller {
 
     const page = ctx.request.body;
     page.project_id = parseInt(projectId);
-
-    if (Array.isArray(page.libs)) {
-      page.libs = page.libs.join(',');
-    }
-
-    if (Array.isArray(page.components)) {
-      page.components = page.components.join(',');
-    }
 
     // 校验保存数据
     try {

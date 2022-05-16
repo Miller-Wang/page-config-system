@@ -12,7 +12,9 @@
     "@babel/preset-react": "^7.16.7",
     "egg": "^2.15.1",
     "egg-mysql": "^3.0.0",
-    "egg-scripts": "^2.11.0"
+    "egg-scripts": "^2.11.0",
+    "es-module-lexer": "^0.10.5",
+    "magic-string": "^0.26.2"
   },
   "devDependencies": {
     "autod": "^3.0.1",

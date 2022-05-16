@@ -1,4 +1,4 @@
-import React from 'react';
+import * as react from 'react';
 import * as zarm from 'zarm';
 import * as umi from 'umi';
 
@@ -8,21 +8,20 @@ function loadStyle(styleCode: string) {
   document.head.appendChild(style);
 }
 
+export function loadComponents(pages: any[]) {
+  const modules = { react, zarm, umi, ...window.$app };
+  pages.forEach((page: any) => {
+    new Function('modules', page.code)(modules);
+    loadStyle(page.style);
+  });
+}
+
 function loadComponent(props: any) {
   const { code, style, components = [], libs = [] } = props;
   const path = window.location.pathname;
-
-  const deps = Array.from(new Set(['React', ...libs, ...components]));
-
-  // 结构依赖
-  const fnBody = `
-    var { ${deps.join(',')} } = libs; 
-    var { ${Object.keys(React)
-      .filter((k) => k.startsWith('use'))
-      .join(',')} } = React; 
-    ${code}`;
+  const modules = { react, zarm, umi, ...window.$app };
   try {
-    new Function('libs', fnBody)({ React, zarm, umi });
+    new Function('modules', code)(modules);
     const Com = window.$app[path];
     loadStyle(style);
 

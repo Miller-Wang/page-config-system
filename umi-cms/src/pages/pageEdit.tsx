@@ -4,7 +4,7 @@ import { history } from 'umi';
 import * as Request from '../request';
 import CodeEditor from '@/components/CodeEditor';
 import IFrame from '@/components/IFrame/index';
-import { DEFAULT_COMPONENT } from '@/constants';
+import { DEFAULT_PAGE } from '@/constants';
 
 // 搭建应用 域名
 const PREFIX = 'http://localhost:8001';
@@ -16,7 +16,7 @@ export default function PageEdit(props: any) {
   const [loading, setLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [detail, setDetail] = useState<any>({
-    editorValue: { sourcecode: DEFAULT_COMPONENT, style: '' },
+    editorValue: { sourcecode: DEFAULT_PAGE, style: '' },
   });
   const [showPreview, setShowPreview] = useState(!!query.id);
 
@@ -96,14 +96,6 @@ export default function PageEdit(props: any) {
 
         <Form.Item label="页面描述" name="desc" required rules={rules}>
           <Input.TextArea />
-        </Form.Item>
-
-        <Form.Item label="依赖类库" name="libs" required rules={rules}>
-          <Select mode="tags" />
-        </Form.Item>
-
-        <Form.Item label="依赖组件" name="components" required rules={rules}>
-          <Select mode="tags" />
         </Form.Item>
 
         <Form.Item label="页面代码" name="editorValue" required rules={rules}>

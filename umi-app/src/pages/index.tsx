@@ -1,6 +1,6 @@
-import ComponentLoader from '@/components/ComponentLoader';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Toast } from 'zarm';
+import ComponentLoader, { loadComponents } from '@/components/ComponentLoader';
 import * as Request from '../request';
 import 'zarm/dist/zarm.min.css';
 
@@ -25,8 +25,16 @@ export default function View(props: any) {
     });
   }, []);
 
-  useEffect(() => {
+  const getComponents = useCallback(async () => {
+    const { data, success } = await Request.getComponents();
+    if (!success) return Toast.show(data.msg);
+    loadComponents(data.pages);
+    // 等组件都加载完成，再加载页面代码
     refresh();
+  }, []);
+
+  useEffect(() => {
+    getComponents();
     // fix: 同一组件不刷新问题
     let curPathname = window.location.pathname;
     props.history.listen((route: { pathname: string }, type: any) => {

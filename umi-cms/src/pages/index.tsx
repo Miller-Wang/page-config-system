@@ -20,7 +20,8 @@ export default function Home(props: any) {
 
   const queryList = useCallback(() => {
     Request.getProjects().then((data) => {
-      data.success && setProjects(data.data);
+      data.success &&
+        setProjects(data.data.filter((v: any) => v.code !== 'components'));
     });
   }, []);
 
@@ -45,9 +46,6 @@ export default function Home(props: any) {
             queryList();
           }
         });
-      case 4:
-        history.push(`/componentList`);
-        break;
     }
   };
 
@@ -93,13 +91,6 @@ export default function Home(props: any) {
       title: '操作',
       dataIndex: 'action',
       render: (val: any, row: any) => {
-        if (row.code === 'components') {
-          return (
-            <span className="link-span" onClick={() => handleAction(4, row)}>
-              查看
-            </span>
-          );
-        }
         return (
           <div>
             <span className="link-span" onClick={() => handleAction(1, row)}>

@@ -7,3 +7,8 @@ export const getPageDetail = (id: string) =>
       skipErrorHandler: true,
     },
   );
+
+export const getComponents = () =>
+  request(`/api/project/5`, {
+    skipErrorHandler: true,
+  });

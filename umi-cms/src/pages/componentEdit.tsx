@@ -99,14 +99,6 @@ export default function PageEdit(props: any) {
           <Input.TextArea />
         </Form.Item>
 
-        <Form.Item label="依赖类库" name="libs" required rules={rules}>
-          <Select mode="tags" />
-        </Form.Item>
-
-        <Form.Item label="依赖组件" name="components" required rules={rules}>
-          <Select mode="tags" />
-        </Form.Item>
-
         <Form.Item label="组件代码" name="editorValue" required rules={rules}>
           <CodeEditor />
         </Form.Item>
