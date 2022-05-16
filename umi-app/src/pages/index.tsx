@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Toast } from 'zarm';
-import ComponentLoader, { loadComponents } from '@/components/ComponentLoader';
+import ComponentLoader, { loadComponent } from '@/components/ComponentLoader';
 import * as Request from '../request';
 import 'zarm/dist/zarm.min.css';
 
@@ -12,24 +12,29 @@ export default function View(props: any) {
   const [isComponent, setIsComponent] = useState(
     window.location.pathname.startsWith('/components/'),
   );
-  const [component, setComponent] = useState<any>({
+  const [componentModules, setComponentModules] = useState({});
+  const [pageConfig, setPageConfig] = useState<any>({
     code: '', // 加载的组件代码
-    components: [], // 依赖的组件
   });
 
   const refresh = useCallback(() => {
     Request.getPageDetail(params.project).then((data) => {
       if (!data.success) return Toast.show(data.msg);
       window.document.title = data.data.name;
-      setComponent(data.data);
+      setPageConfig(data.data);
     });
   }, []);
 
   const getComponents = useCallback(async () => {
     const { data, success } = await Request.getComponents();
     if (!success) return Toast.show(data.msg);
-    loadComponents(data.pages);
-    // 等组件都加载完成，再加载页面代码
+    const modules = data.pages.reduce((memo: any, page: any) => {
+      const path = `/components${page.path}`;
+      memo[path] = page;
+      return memo;
+    }, {});
+    setComponentModules(modules);
+    // 获取组件模块后，再加载页面代码
     refresh();
   }, []);
 
@@ -68,6 +73,11 @@ export default function View(props: any) {
   }, []);
 
   return (
-    <ComponentLoader {...props} {...component} isComponent={isComponent} />
+    <ComponentLoader
+      {...props}
+      pageConfig={pageConfig}
+      componentModules={componentModules}
+      isComponent={isComponent}
+    />
   );
 }

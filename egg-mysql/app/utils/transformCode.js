@@ -20,6 +20,9 @@ async function rewriteImports(bodyContent) {
   const [imports, exports] = parse(bodyContent);
   const magicString = new MagicString(bodyContent);
 
+  // 内部依赖
+  const dependencies = [];
+
   if (imports && imports.length > 0) {
     // const libs = imports.map((v) => v.n);
     const result = [];
@@ -42,13 +45,21 @@ async function rewriteImports(bodyContent) {
         matched && result.push(n === matched ? n : `'${n}': ${matched}`);
       }
 
+      // 是内部依赖
+      if (n.startsWith('/')) {
+        dependencies.push(n);
+      }
+
       magicString.remove(ss, se);
     });
 
     const resStr = `const { ${result.join(', ')} } = modules;`;
     magicString.prepend(resStr);
   }
-  return magicString.toString();
+  return {
+    code: magicString.toString(),
+    dependencies,
+  };
 }
 
 /**
@@ -64,15 +75,16 @@ async function transformCode(page) {
     presets: ['@babel/preset-react'],
   });
 
-  result.code = await rewriteImports(result.code);
+  const { code, dependencies } = await rewriteImports(result.code);
 
-  result.code += `window.$app['${pathname}'] = ${componentName}`;
+  result.code = `${code}\nwindow.$app['${pathname}'] = ${componentName}`;
 
   // 如果是组件要导出测试组件
   if (pathname.startsWith('/components/')) {
-    result.code += `window.$app['${pathname}/test'] = Test;`;
+    result.code += `\nwindow.$app['${pathname}/test'] = Test;`;
   }
 
+  page.dependencies = dependencies.join(',');
   delete page.pathname;
   return result.code;
 }

@@ -57,7 +57,7 @@ async function rewriteImports(bodyContent) {
 
 rewriteImports(code)
   .then((res) => {
-    debugger;
+    console.log(res);
   })
   .catch((err) => console.log(err));
 
