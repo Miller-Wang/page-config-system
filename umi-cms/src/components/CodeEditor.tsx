@@ -5,13 +5,12 @@ import { javascript } from '@codemirror/lang-javascript';
 import { css } from '@codemirror/lang-css';
 import * as Request from '../request';
 
-
 const { TabPane } = Tabs;
 
 interface IProps {
   value?: {
     sourcecode: string;
-    style: string;
+    less: string;
   };
   onChange?: (val: any) => void;
 }
@@ -20,53 +19,53 @@ interface IProps {
 export default function CodeEditor(props: IProps) {
   const { value, onChange } = props;
 
-  const [curKey, setCurKey] = useState('code');
+  const [curKey, setCurKey] = useState('sourcecode');
+
+  const handleEditorChange = useCallback(
+    (code: string) => {
+      if (!onChange) return;
+      onChange({ ...value, [curKey]: code });
+    },
+    [curKey, onChange],
+  );
 
   const handleAction = useCallback(async () => {
-    const { success, data } = await Request.codeFormat(value!.sourcecode);
+    // @ts-ignore
+    const { success, data } = await Request.codeFormat(value[curKey], curKey);
     if (!success || !onChange) return;
-    onChange({
-      ...value,
-      sourcecode: data.code,
-    });
-  }, []);
+    handleEditorChange(data.code);
+  }, [handleEditorChange, value!.sourcecode, value!.less, curKey]);
 
   return (
     <>
-      <Tabs defaultActiveKey={curKey} onTabClick={(key) => setCurKey(key)} animated >
-        <TabPane tab="组件" key="code" forceRender>
+      <Tabs
+        defaultActiveKey={curKey}
+        onTabClick={(key) => setCurKey(key)}
+        animated
+      >
+        <TabPane tab="组件" key="sourcecode" forceRender>
           <CodeMirror
             value={value?.sourcecode}
             theme="dark"
             height="500px"
             extensions={[javascript({ jsx: true })]}
-            onChange={(code, viewUpdate) => {
-              if (!onChange) return;
-              onChange({
-                ...value,
-                sourcecode: code,
-              });
-            }}
+            onChange={handleEditorChange}
           />
         </TabPane>
-        <TabPane tab="CSS" key="style" forceRender>
+        <TabPane tab="样式 / less" key="less" forceRender>
           <CodeMirror
-            value={value?.style}
+            value={value?.less}
             theme="dark"
             height="500px"
             extensions={[css()]}
-            onChange={(code, viewUpdate) => {
-              if (!onChange) return;
-              onChange({
-                ...value,
-                style: code,
-              });
-            }}
+            onChange={handleEditorChange}
           />
         </TabPane>
       </Tabs>
-      <Button type='primary' size='small' onClick={handleAction}>格式化</Button>
-      <Button size='small'>校验</Button>
+      <Button type="primary" size="small" onClick={handleAction}>
+        格式化
+      </Button>
+      {/* <Button size="small">校验</Button> */}
     </>
   );
 }

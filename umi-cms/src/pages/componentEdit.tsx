@@ -7,7 +7,7 @@ import IFrame from '@/components/IFrame/index';
 import { DEFAULT_COMPONENT } from '@/constants';
 
 // 搭建应用 域名
-const PREFIX = 'http://localhost:8001';
+const PREFIX = 'http://localhost:8000';
 
 export default function PageEdit(props: any) {
   const { query } = props.location;
@@ -18,7 +18,7 @@ export default function PageEdit(props: any) {
   const [detail, setDetail] = useState<any>({
     editorValue: {
       sourcecode: DEFAULT_COMPONENT,
-      style: '',
+      less: '',
     },
   });
   const [showPreview, setShowPreview] = useState(!!query.id);
@@ -28,10 +28,10 @@ export default function PageEdit(props: any) {
       setLoading(true);
       Request.getPageDetail(query.id).then((data) => {
         if (data.success) {
-          const { sourcecode, style = '' } = data.data;
+          const { sourcecode, less = '' } = data.data;
           data.data.editorValue = {
             sourcecode,
-            style,
+            less,
           };
           setDetail(data.data);
         }

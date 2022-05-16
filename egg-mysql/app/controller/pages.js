@@ -3,6 +3,7 @@
 const Controller = require('egg').Controller;
 const formatCode = require('../utils/formatCode');
 const transformCode = require('../utils/transformCode');
+const transformLess = require('../utils/transformLess');
 
 class PagesController extends Controller {
   async getPages() {
@@ -85,6 +86,8 @@ class PagesController extends Controller {
       // 转换组件代码
       page.code = await transformCode(page);
 
+      page.style = await transformLess(page.less);
+
       const res = await this.app.mysql.insert('pages', page);
       ctx.body = {
         success: true,
@@ -123,6 +126,8 @@ class PagesController extends Controller {
 
       // 转换组件代码
       page.code = await transformCode(page);
+      // 转换样式
+      page.style = await transformLess(page.less);
 
       page.id = parseInt(id);
       const res = await this.app.mysql.update('pages', page);
@@ -154,14 +159,14 @@ class PagesController extends Controller {
   }
 
   // 代码格式化
-  async codeFormat(){
+  async codeFormat() {
     const { ctx } = this;
-    const { code } = ctx.request.body;
+    const { code, type } = ctx.request.body;
 
     ctx.body = {
       success: true,
       data: {
-        code: formatCode(code)
+        code: formatCode(code, type),
       },
     };
   }

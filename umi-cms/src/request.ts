@@ -33,9 +33,9 @@ export const updatePage = (pid: string, id: string, params: any) =>
 export const delPage = (id: string) =>
   request(`/api/page/${id}`, { method: 'delete' });
 // 代码格式化
-export const codeFormat = (code: string) =>
+export const codeFormat = (code: string, type: string) =>
   request(`/api/page/codeFormat`, {
     method: 'post',
-    data: { code },
+    data: { code, type },
     skipErrorHandler: true,
   });

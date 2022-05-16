@@ -7,7 +7,7 @@ import IFrame from '@/components/IFrame/index';
 import { DEFAULT_PAGE } from '@/constants';
 
 // 搭建应用 域名
-const PREFIX = 'http://localhost:8001';
+const PREFIX = 'http://localhost:8000';
 
 export default function PageEdit(props: any) {
   const { query } = props.location;
@@ -16,7 +16,7 @@ export default function PageEdit(props: any) {
   const [loading, setLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [detail, setDetail] = useState<any>({
-    editorValue: { sourcecode: DEFAULT_PAGE, style: '' },
+    editorValue: { sourcecode: DEFAULT_PAGE, less: '' },
   });
   const [showPreview, setShowPreview] = useState(!!query.id);
 
@@ -25,8 +25,8 @@ export default function PageEdit(props: any) {
       setLoading(true);
       Request.getPageDetail(query.id).then((data) => {
         if (data.success) {
-          const { sourcecode, style = '' } = data.data;
-          data.data.editorValue = { sourcecode, style };
+          const { sourcecode, less = '' } = data.data;
+          data.data.editorValue = { sourcecode, less };
           setDetail(data.data);
         }
         setLoading(false);
@@ -35,14 +35,12 @@ export default function PageEdit(props: any) {
   }, []);
 
   const onFinish = async (values: any) => {
-    const { sourcecode, style } = values.editorValue;
-    delete values.editorValue;
     const params = {
       ...values,
       pathname: `/${query.code}${values.path}`,
-      sourcecode,
-      style,
+      ...values.editorValue,
     };
+    delete params.editorValue;
 
     try {
       setSaveLoading(true);
