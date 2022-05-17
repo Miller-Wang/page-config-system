@@ -5,7 +5,7 @@
 
 ![项目列表](./images/projects.png)
 ![页面列表](./images/pages.png)
-![页面编辑](./images/editor.png)
+![编辑页面](./images/editor.png)
 
 ## egg-mysql
 
@@ -61,6 +61,7 @@ CREATE TABLE `pages` (
 - 配置应用实时预览
 - 代码格式化
 - 支持 dva 状态管理，编写 model
+- 代码校验
 
 ## umi-app
 
@@ -73,3 +74,6 @@ CREATE TABLE `pages` (
 - 支持 dva 状态管理
 
 ## TODO
+
+- 请求
+- 工具方法

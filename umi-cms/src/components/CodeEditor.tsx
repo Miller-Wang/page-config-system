@@ -1,8 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { Tabs, Button } from 'antd';
 import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
+import { javascript, esLint } from '@codemirror/lang-javascript';
 import { css } from '@codemirror/lang-css';
+import { linter } from '@codemirror/lint';
+// @ts-ignore
+import Linter from 'eslint4b-prebuilt';
 import * as Request from '../request';
 
 const { TabPane } = Tabs;
@@ -51,7 +54,10 @@ export default function CodeEditor(props: IProps) {
             value={value?.sourcecode}
             theme="dark"
             height="500px"
-            extensions={[javascript({ jsx: true })]}
+            extensions={[
+              javascript({ jsx: true }),
+              linter(esLint(new Linter())),
+            ]}
             onChange={handleEditorChange}
           />
         </TabPane>
@@ -70,7 +76,7 @@ export default function CodeEditor(props: IProps) {
               value={value?.model}
               theme="dark"
               height="500px"
-              extensions={[javascript()]}
+              extensions={[javascript(), linter(esLint(new Linter()))]}
               onChange={handleEditorChange}
             />
           </TabPane>
@@ -79,7 +85,6 @@ export default function CodeEditor(props: IProps) {
       <Button type="primary" size="small" onClick={handleAction}>
         格式化
       </Button>
-      {/* <Button size="small">校验</Button> */}
     </>
   );
 }
