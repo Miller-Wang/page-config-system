@@ -89,4 +89,4 @@ async function transformCode(page) {
   return result.code;
 }
 
-module.exports = transformCode;
+module.exports = { transformCode, rewriteImports };

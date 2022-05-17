@@ -1,6 +1,7 @@
 import * as react from 'react';
 import * as zarm from 'zarm';
 import * as umi from 'umi';
+import * as dva from 'dva';
 
 function loadStyle(styleCode: string) {
   const style = window.document.createElement('style');
@@ -8,26 +9,40 @@ function loadStyle(styleCode: string) {
   document.head.appendChild(style);
 }
 
-export function loadComponent(componentModules: any, page: any, isPage?: boolean) {
-  const { code, style } = page;
-  const dependencies = (page.dependencies || '').split(',').filter((v: string) => !!v);
+export function loadComponent(
+  componentModules: any,
+  page: any,
+  isPage?: boolean,
+) {
+  const { code, style, modelcode } = page;
+  const dependencies = (page.dependencies || '')
+    .split(',')
+    .filter((v: string) => !!v);
 
   if (!isPage) {
     const path = `/components${page.path}`;
     // 模块加载过了
     if (window.$app[path]) return window.$app[path];
   }
-  
+
   // 未加载的依赖
-  const unloadDependencies = dependencies.filter((dep: string) => !window.$app[dep]);
+  const unloadDependencies = dependencies.filter(
+    (dep: string) => !window.$app[dep],
+  );
 
   if (unloadDependencies.length > 0) {
     // 先加载依赖
-    unloadDependencies.forEach((dep: string) => loadComponent(componentModules, componentModules[dep]));
+    unloadDependencies.forEach((dep: string) =>
+      loadComponent(componentModules, componentModules[dep]),
+    );
   }
 
-  const modules = { react, zarm, umi, ...window.$app };
+  const modules = { react, zarm, umi, dva, ...window.$app };
   new Function('modules', code)(modules);
+
+  if (modelcode) {
+    new Function('modules', modelcode)(modules);
+  }
   loadStyle(style);
 }
 
@@ -51,7 +66,10 @@ function getComponent(props: any) {
 
 // 根据字符串加载组件
 function ComponentLoader(props: any) {
-  const { pageConfig: { code }, isComponent } = props;
+  const {
+    pageConfig: { code },
+    isComponent,
+  } = props;
   if (!code) return <div>Loading...</div>;
 
   const path = window.location.pathname;

@@ -2,7 +2,7 @@
 
 const Controller = require('egg').Controller;
 const formatCode = require('../utils/formatCode');
-const transformCode = require('../utils/transformCode');
+const { transformCode, rewriteImports } = require('../utils/transformCode');
 const transformLess = require('../utils/transformLess');
 
 class PagesController extends Controller {
@@ -88,6 +88,11 @@ class PagesController extends Controller {
 
       page.style = await transformLess(page.less);
 
+      if (page.model) {
+        const buildedModel = await rewriteImports(page.model);
+        page.modelcode = buildedModel.code;
+      }
+
       const res = await this.app.mysql.insert('pages', page);
       ctx.body = {
         success: true,
@@ -128,6 +133,11 @@ class PagesController extends Controller {
       page.code = await transformCode(page);
       // 转换样式
       page.style = await transformLess(page.less);
+
+      if (page.model) {
+        const buildedModel = await rewriteImports(page.model);
+        page.modelcode = buildedModel.code;
+      }
 
       page.id = parseInt(id);
       const res = await this.app.mysql.update('pages', page);

@@ -3,6 +3,7 @@ import { Toast } from 'zarm';
 import ComponentLoader, { loadComponent } from '@/components/ComponentLoader';
 import * as Request from '../request';
 import 'zarm/dist/zarm.min.css';
+import { useDispatch, useSelector } from 'dva';
 
 // @ts-ignore
 window.$app = {};

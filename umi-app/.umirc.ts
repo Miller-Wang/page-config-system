@@ -21,4 +21,5 @@ export default defineConfig({
       pathRewrite: { '^/api': '' },
     },
   },
+  dva: {},
 });

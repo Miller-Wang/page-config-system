@@ -11,13 +11,16 @@ interface IProps {
   value?: {
     sourcecode: string;
     less: string;
+    model?: string;
   };
   onChange?: (val: any) => void;
+  // 显示model
+  showModel?: boolean;
 }
 
 // 组件编辑器
 export default function CodeEditor(props: IProps) {
-  const { value, onChange } = props;
+  const { value, onChange, showModel } = props;
 
   const [curKey, setCurKey] = useState('sourcecode');
 
@@ -61,6 +64,17 @@ export default function CodeEditor(props: IProps) {
             onChange={handleEditorChange}
           />
         </TabPane>
+        {showModel && (
+          <TabPane tab="Model" key="model" forceRender>
+            <CodeMirror
+              value={value?.model}
+              theme="dark"
+              height="500px"
+              extensions={[javascript()]}
+              onChange={handleEditorChange}
+            />
+          </TabPane>
+        )}
       </Tabs>
       <Button type="primary" size="small" onClick={handleAction}>
         格式化

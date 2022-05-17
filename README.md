@@ -16,6 +16,7 @@
 - 支持代码中 import 外部依赖解析
 - 支持代码中引入内部组件的解析
 - 支持 jsx 和 less 代码格式化
+- 支持 model 代码解析
 
 ### 建表语句
 
@@ -37,9 +38,11 @@ CREATE TABLE `pages` (
   `sourcecode` longtext CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '源代码',
   `desc` varchar(255) NOT NULL,
   `code` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '编译后代码',
-  `style` longtext CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '样式',
+  `style` longtext CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '编译后样式',
   `dependencies` longtext,
-  `less` longtext NOT NULL,
+  `less` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '样式代码',
+  `model` longtext COMMENT 'dva状态',
+  `modelcode` longtext COMMENT '编译后的model',
   PRIMARY KEY (`id`),
   KEY `project_id` (`project_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb3;
@@ -57,6 +60,7 @@ CREATE TABLE `pages` (
 - jsx 与 less 代码编辑
 - 配置应用实时预览
 - 代码格式化
+- 支持 dva 状态管理，编写 model
 
 ## umi-app
 
@@ -66,5 +70,6 @@ CREATE TABLE `pages` (
 - 通过页面路径，加载不同页面配置
 - 动态加载接口返回的页面组件代码与样式
 - 支持内部组件的引入
+- 支持 dva 状态管理
 
 ## TODO

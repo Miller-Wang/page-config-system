@@ -4,7 +4,7 @@ import { history } from 'umi';
 import * as Request from '../request';
 import CodeEditor from '@/components/CodeEditor';
 import IFrame from '@/components/IFrame/index';
-import { DEFAULT_PAGE } from '@/constants';
+import { DEFAULT_MODEL, DEFAULT_PAGE } from '@/constants';
 
 // 搭建应用 域名
 const PREFIX = 'http://localhost:8000';
@@ -16,7 +16,7 @@ export default function PageEdit(props: any) {
   const [loading, setLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [detail, setDetail] = useState<any>({
-    editorValue: { sourcecode: DEFAULT_PAGE, less: '' },
+    editorValue: { sourcecode: DEFAULT_PAGE, less: '', model: DEFAULT_MODEL },
   });
   const [showPreview, setShowPreview] = useState(!!query.id);
 
@@ -25,8 +25,12 @@ export default function PageEdit(props: any) {
       setLoading(true);
       Request.getPageDetail(query.id).then((data) => {
         if (data.success) {
-          const { sourcecode, less = '' } = data.data;
-          data.data.editorValue = { sourcecode, less };
+          const { sourcecode, less = '', model } = data.data;
+          data.data.editorValue = {
+            sourcecode,
+            less,
+            model: model || DEFAULT_MODEL,
+          };
           setDetail(data.data);
         }
         setLoading(false);
@@ -97,7 +101,7 @@ export default function PageEdit(props: any) {
         </Form.Item>
 
         <Form.Item label="页面代码" name="editorValue" required rules={rules}>
-          <CodeEditor />
+          <CodeEditor showModel />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
