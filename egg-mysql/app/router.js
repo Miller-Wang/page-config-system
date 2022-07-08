@@ -35,5 +35,13 @@ module.exports = (app) => {
   // 代码格式化
   router.post('/page/codeFormat', controller.pages.codeFormat);
 
-  // 校验代码
+  // 弹福相关接口
+  router.post('/addWelfarePage', controller.welfare.addPage);
+  router.post('/updateWelfarePage/:id', controller.welfare.updatePage);
+  router.get('/welfare/getPage/:id', controller.welfare.getPage);
+  router.get('/welfare/getPages', controller.welfare.getPages);
+  router.post('/welfare/delPage/:id', controller.welfare.delPage);
+
+  // h5用
+  router.get('/getPageDetail', controller.welfare.getPageDetail);
 };
